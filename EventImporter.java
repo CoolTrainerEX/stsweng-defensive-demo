@@ -41,7 +41,7 @@ public class EventImporter {
         continue;
       }
 
-      if (List.of("red", "green", "blue").contains(values[2])) {
+      if (!List.of("red", "green", "blue").contains(values[2])) {
         System.err.println("Invalid color.");
         invalid++;
 
