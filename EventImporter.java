@@ -18,6 +18,7 @@ public class EventImporter {
     List<String> lines = Files.readAllLines(Path.of(filename));
 
     boolean empty;
+    int valid = 0, invalid = 0;
 
     for (String line : lines) {
 
@@ -25,10 +26,25 @@ public class EventImporter {
 
       empty = false;
 
+      if (values.length != 3) {
+        System.err.println("Must have three values.");
+        invalid++;
+        continue;
+      }
+
       for (String value : values) if (value.trim().isEmpty()) empty = true;
 
       if (empty) {
         System.err.println("Invalid empty value.");
+        invalid++;
+
+        continue;
+      }
+
+      if (List.of("red", "green", "blue").contains(values[2])) {
+        System.err.println("Invalid color.");
+        invalid++;
+
         continue;
       }
 
@@ -39,10 +55,14 @@ public class EventImporter {
         String color = values[2].trim();
 
         events.add(new Event(date, title, color));
+        valid++;
       } catch (DateTimeParseException e) {
-        System.err.println(e.getMessage());
+        System.err.println("Invalid date.");
+        invalid++;
       }
     }
+
+    System.out.println("Valid: " + valid + "\nInvalid: " + invalid);
 
     return events;
   }
